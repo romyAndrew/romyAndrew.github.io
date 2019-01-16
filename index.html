@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Вычисление числа ПИ</h2>
+
+
+<button type="button" onclick="onClick()">Посчитать</button>
+
+<p id="answer"></p>
+<p id="subtitle"></p>
+<script>
+	const MAX_N = 1e8;
+
+    function leibnec(n) {
+        let sign = -1;
+        let res = 1;
+        for (let i = 1; i < n; i++) {
+            res += sign * (1/(i * 2 + 1));
+            sign *= -1;
+        }
+        return res * 4;
+    }
+	
+	function getPrecision(sample, answer) {
+		const regExp = /\d+\.(\d+)/gi;
+		sample = `${sample}`.replace(regExp, '$1');
+		answer = `${answer}`.replace(regExp, '$1');
+		for (let i in sample) {
+			if(sample[i] !== answer[i]) {
+				return +i;
+			}
+		}
+	}
+
+	function onClick() {
+		const n = window.prompt('введите число n');
+		if(isNaN(+n)) {
+			alert('Необходимо ввести число');
+			return;
+		}
+		
+		if (n > MAX_N || n < 1) {
+			alert(`Необходимо ввести значение от ${1} до ${MAX_N}`);
+			return;
+		}
+		const answerElement = document.getElementById('answer');
+		const answer = leibnec(+n);
+		answerElement.innerText = `Число пи примерно равно ${answer}`;
+		const subtitleElement = document.getElementById('subtitle');
+		const regExp = /\d\.(?<zeros>[0]+)/;
+		const precision = getPrecision(Math.PI, answer);
+		subtitleElement.innerText = `Вычислено с точностью до ${precision} знаков после запятой по ${n} членам последовательности Лейбница`;
+	}
+</script>
+
+</body>
+</html> 
